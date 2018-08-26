@@ -11,5 +11,5 @@ export const TextInput: React.SFC<ITextInputProps> = ({
     placeholder,
     onChange
 }) => (
-    <input placeholder={placeholder} value={value} onChange={onChange} />
+    <input type='text' placeholder={placeholder} value={value} onChange={onChange} />
 )
