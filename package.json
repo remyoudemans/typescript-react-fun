@@ -13,13 +13,18 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "precise-commits": "precise-commits",
+    "precommit": "npm run precise-commits"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/node": "^10.7.1",
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.7",
+    "husky": "^0.14.3",
+    "precise-commits": "^1.0.2",
+    "prettier": "^1.14.2",
     "tslint-react": "^3.6.0",
     "typescript": "^3.0.1"
   }
