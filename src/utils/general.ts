@@ -1,0 +1,1 @@
+export const isDefined = (element: any) => typeof element !== 'undefined'
