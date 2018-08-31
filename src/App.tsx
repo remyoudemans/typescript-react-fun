@@ -1,7 +1,6 @@
 import * as React from 'react'
 import './App.css'
 
-import logo from './logo.svg'
 import { Welcome } from './features/welcome/welcome'
 
 class App extends React.Component {
@@ -9,13 +8,6 @@ class App extends React.Component {
     return (
       <div className="App">
         <Welcome />
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
       </div>
     );
   }

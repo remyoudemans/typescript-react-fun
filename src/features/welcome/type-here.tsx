@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { changeItemAtIndex, funcIf } from '../../utils';
-import { TextInput } from '../../components/text-input/text-input';
+import { TextInput } from '../../components/text-input';
+import { Chapter } from './chapter';
 
 interface TypeHereState {
     inputValue: string
@@ -37,7 +38,7 @@ export class TypeHere extends React.Component<{}, {}> {
         funcIf(this.state.inputValue !== '', this.submitTitle)
     }
 
-    private onChangeUnsubmittedChapterContent = (value: string, index: number) => {
+    private onChapterContentChange = (value: string, index: number) => {
         this.setState((prevState: TypeHereState) => ({
             ...prevState,
             unsubmittedChapterContents: changeItemAtIndex(
@@ -48,37 +49,48 @@ export class TypeHere extends React.Component<{}, {}> {
         }))
     }
 
+    private onChapterContentSubmit = (index: number) => {
+        this.setState((prevState: TypeHereState) => ({
+            ...prevState,
+            chapterContents: changeItemAtIndex(
+                prevState.chapterContents,
+                index,
+                prevState.unsubmittedChapterContents[index]
+            ),
+            unsubmittedChapterContents: changeItemAtIndex(
+                prevState.unsubmittedChapterContents,
+                index,
+                ''
+            )
+        }))
+    }
+
     public render() {
         const { inputValue, titles, chapterContents, unsubmittedChapterContents } = this.state
         return (
-            <div>
+            <>
                 <TextInput
-                    placeholder='get typing'
+                    placeholder={`title of chapter ${titles.length + 1}`}
                     value={inputValue}
                     onChange={this.onType}
+                    onEnter={this.onTitleSubmit}
                 />
                 <button onClick={this.onTitleSubmit}>Click me!</button>
                 {titles.length ?
                     titles.map((title, index) =>
-                        <div key={`submissions-chapter-${index}`}>
-                            <h3>Chapter {index}: {title}</h3>
-                            <p>
-                                {chapterContents[index]
-                                    ? chapterContents
-                                    : <TextInput
-                                        placeholder='tell me the story'
-                                        value={unsubmittedChapterContents[index]}
-                                        onChange={(e) => {
-                                            this.onChangeUnsubmittedChapterContent(e.target.value, index)
-                                        }}
-                                      />
-                                }
-                            </p>
-                        </div>
+                        <Chapter
+                            key={`submissions-chapter-${index}`}
+                            title={title}
+                            chapterIndex={index}
+                            chapterText={chapterContents[index]}
+                            unsubmittedChapterText={unsubmittedChapterContents[index]}
+                            onChapterTextChange={this.onChapterContentChange}
+                            onChapterTextSubmit={this.onChapterContentSubmit}
+                        />
                     )
                     : null
                 }
-            </div>
+            </>
         )
     }
     
