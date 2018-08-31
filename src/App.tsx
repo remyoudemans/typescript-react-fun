@@ -2,7 +2,7 @@ import * as React from 'react'
 import './App.css'
 
 import logo from './logo.svg'
-import { Welcome } from './welcome/welcome'
+import { Welcome } from './features/welcome/welcome'
 
 class App extends React.Component {
   public render() {

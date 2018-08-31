@@ -3,7 +3,7 @@ import * as React from 'react'
 interface ITextInputProps {
     value: string
     placeholder: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onChange: React.ChangeEventHandler<HTMLInputElement>
 }
 
 export const TextInput: React.SFC<ITextInputProps> = ({
