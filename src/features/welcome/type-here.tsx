@@ -45,8 +45,16 @@ export class TypeHere extends React.Component<{}, {}> {
 
          private onChapterContentChange = (value: string, index: number) => {
            this.setState((prevState: TypeHereState) => ({
-             unsubmittedChapterContents: changeItemAtIndex(               prevState.unsubmittedChapterContents,
-               index,
+             unsubmittedChapterContents: changeItemAtIndex(
+
+
+
+
+
+
+               prevState.unsubmittedChapterContents,
+               index
+,
                value
              )
            }));

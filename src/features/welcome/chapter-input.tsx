@@ -9,18 +9,30 @@ interface ChapterInputProps {
 	onTextChange: (content: string, index: number) => void
 }
 
-export const ChapterInput: React.SFC<ChapterInputProps> = ({ index, text, onTextSubmit, onTextChange }) => {
-         const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+export const ChapterInput: React.SFC<ChapterInputProps> = ({
+  index,
+  text,
+  onTextSubmit,
+  onTextChange
+}) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onTextChange(e.target.value, index);
-         };
-         const onSubmit = (e: React.MouseEvent<HTMLElement>) => {
+  };
+  const onSubmit = (e: React.MouseEvent<HTMLElement>) => {
     onTextSubmit(index);
-         };
-         const onEnter = () => {
-           onTextSubmit(index);
-         };
-         return <>
-             <TextInput placeholder="tell me the story" value={text} onChange={onChange} onEnter={onEnter} />
-             <Button primary onClick={onSubmit} text="Submit" />
-           </>;
-       };
+  };
+  const onEnter = () => {
+    onTextSubmit(index);
+  };
+  return (
+    <>
+      <TextInput
+        placeholder="tell me the story"
+        value={text}
+        onChange={onChange}
+        onEnter={onEnter}
+      />
+      <Button primary onClick={onSubmit} text="Submit" />
+    </>
+  );
+};
