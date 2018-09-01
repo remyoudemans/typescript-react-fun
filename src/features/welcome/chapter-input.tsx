@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { TextInput } from '../../components/text-input'
-import { Button } from "../../components/button";
+import { Button } from '../../components/button'
 
 interface ChapterInputProps {
 	index: number
@@ -10,29 +10,29 @@ interface ChapterInputProps {
 }
 
 export const ChapterInput: React.SFC<ChapterInputProps> = ({
-  index,
-  text,
-  onTextSubmit,
-  onTextChange
+	index,
+	text,
+	onTextSubmit,
+	onTextChange
 }) => {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onTextChange(e.target.value, index);
-  };
-  const onSubmit = (e: React.MouseEvent<HTMLElement>) => {
-    onTextSubmit(index);
-  };
-  const onEnter = () => {
-    onTextSubmit(index);
-  };
-  return (
-    <>
-      <TextInput
-        placeholder="tell me the story"
-        value={text}
-        onChange={onChange}
-        onEnter={onEnter}
-      />
-      <Button primary onClick={onSubmit} text="Submit" />
-    </>
-  );
-};
+	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		onTextChange(e.target.value, index)
+	}
+	const onSubmit = (e: React.MouseEvent<HTMLElement>) => {
+		onTextSubmit(index)
+	}
+	const onEnter = () => {
+		onTextSubmit(index)
+	}
+	return (
+		<>
+			<TextInput
+				placeholder="tell me the story"
+				value={text}
+				onChange={onChange}
+				onEnter={onEnter}
+			/>
+			<Button primary onClick={onSubmit} text="Submit" />
+		</>
+	)
+}
