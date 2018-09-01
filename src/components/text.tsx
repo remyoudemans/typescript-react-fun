@@ -5,7 +5,7 @@ interface TextProps {
 	tiny?: boolean
 }
 
-export const Text = styled('p')(({ italic, tiny }: TextProps) => ({
-	fontStyle: italic ? 'italic' : undefined,
-	fontSize: tiny ? 9 : 12
-}))
+export const Text = styled("p")(({ italic, tiny }: TextProps) => ({
+  fontStyle: italic ? "italic" : undefined,
+  fontSize: tiny ? 9 : 12
+}));
