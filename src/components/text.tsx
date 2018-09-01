@@ -1,14 +1,11 @@
 import styled from 'react-emotion'
 
 interface TextProps {
-    italic?: boolean
+	italic?: boolean
+	tiny?: boolean
 }
 
-export const Text = styled('p')({
-    fontSize: 12,
-    },
-    ({ italic }: TextProps) => ({
-        fontStyle: italic ? 'italic' : undefined
-
-    })
-)
+export const Text = styled("p")(({ italic, tiny }: TextProps) => ({
+  fontStyle: italic ? "italic" : undefined,
+  fontSize: tiny ? 9 : 12
+}));

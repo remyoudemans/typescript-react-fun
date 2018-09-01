@@ -3,31 +3,34 @@ import { isDefined, funcIf } from '../utils'
 import { Input } from './input'
 
 interface TextInputProps {
-    value: string
-    placeholder: string
-    onChange: React.ChangeEventHandler<HTMLInputElement>
-    onEnter?: () => void
+	value: string
+	placeholder: string
+	onChange: React.ChangeEventHandler<HTMLInputElement>
+	onEnter?: () => void
+	innerRef?: React.RefObject<{}>
 }
 
 export const TextInput: React.SFC<TextInputProps> = ({
-    value,
-    placeholder,
-    onChange,
-    onEnter,
+	value,
+	placeholder,
+	onChange,
+	onEnter,
+	innerRef
 }) => {
-    const onKeyDown = !isDefined(onEnter)
-        ? undefined
-        : (e: React.KeyboardEvent) => {
-            funcIf(e.keyCode === 13, onEnter as () => void)
-        }
+	const onKeyDown = !isDefined(onEnter)
+		? undefined
+		: (e: React.KeyboardEvent) => {
+				funcIf(e.keyCode === 13, onEnter as () => void)
+		  }
 
-    return (
-        <Input 
-            type='text' 
-            placeholder={placeholder}
-            value={value} 
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-        />
-    )
+	return (
+		<Input
+			innerRef={innerRef}
+			type="text"
+			placeholder={placeholder}
+			value={value}
+			onChange={onChange}
+			onKeyDown={onKeyDown}
+		/>
+	)
 }
