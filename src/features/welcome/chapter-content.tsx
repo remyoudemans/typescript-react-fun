@@ -6,14 +6,19 @@ interface ChapterContentProps {
 	makeContentEditable: () => void
 }
 
-export const ChapterContent: React.SFC<ChapterContentProps> = ({  text,  makeContentEditable }) => {
-    const makeTextEditable = (e: React.MouseEvent) => {
-       makeContentEditable();
-         };
-         return <>
-             <Text italic>{text}</Text>
-             <Text tiny onClick={makeTextEditable}>
-               (change?)
-             </Text>
-           </>;
-       };
+export const ChapterContent: React.SFC<ChapterContentProps> = ({
+  text,
+  makeContentEditable
+}) => {
+  const makeTextEditable = (e: React.MouseEvent) => {
+    makeContentEditable();
+  };
+  return (
+    <>
+      <Text italic>{text}</Text>
+      <Text tiny onClick={makeTextEditable}>
+        (change?)
+      </Text>
+    </>
+  );
+};
