@@ -7,13 +7,15 @@ interface TextInputProps {
 	placeholder: string
 	onChange: React.ChangeEventHandler<HTMLInputElement>
 	onEnter?: () => void
+	innerRef?: React.RefObject<{}>
 }
 
 export const TextInput: React.SFC<TextInputProps> = ({
 	value,
 	placeholder,
 	onChange,
-	onEnter
+	onEnter,
+	innerRef
 }) => {
 	const onKeyDown = !isDefined(onEnter)
 		? undefined
@@ -23,6 +25,7 @@ export const TextInput: React.SFC<TextInputProps> = ({
 
 	return (
 		<Input
+			innerRef={innerRef}
 			type="text"
 			placeholder={placeholder}
 			value={value}
