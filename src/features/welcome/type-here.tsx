@@ -3,6 +3,12 @@ import { changeItemAtIndex, funcIf } from '../../utils'
 import { TextInput } from '../../components/text-input'
 import { Chapter } from './chapter'
 import { Button } from '../../components/button'
+import { Welcome } from '../../store/modules'
+import { bindActionCreators, Dispatch } from 'redux'
+import { connect } from 'react-redux'
+import { Stories } from '../../store/modules/welcome'
+
+import { Root } from '../../store/modules'
 
 interface TypeHereState {
 	inputValue: string
@@ -12,35 +18,24 @@ interface TypeHereState {
 	unsubmittedChapterContents: string[]
 }
 
-export class TypeHere extends React.Component<{}, {}> {
+interface TypeHereStateProps {
+	exampleStories: Stories
+	isLoading: boolean
+}
+
+interface TypeHereDispatchProps {
+	requestExampleStories: typeof Welcome.ActionCreators.requestExampleStories
+}
+
+type TypeHereProps = TypeHereStateProps & TypeHereDispatchProps
+
+class TypeHereClass extends React.Component<TypeHereProps> {
 	public state: TypeHereState = {
 		inputValue: '',
 		titleCount: 0,
 		titles: [],
 		chapterContents: [],
 		unsubmittedChapterContents: []
-	}
-
-	public componentDidMount() {
-		fetch('http://localhost:3001/example-story', {
-			mode: 'cors'
-		})
-			.then(response => {
-				if (response.status !== 200) {
-					console.log(
-						'Looks like there was a problem. Status Code: ' + response.status
-					)
-					return
-				}
-
-				// Examine the text in the response
-				response.json().then(data => {
-					console.log(data)
-				})
-			})
-			.catch(err => {
-				console.log('Fetch Error :-S', err)
-			})
 	}
 
 	private titleInputRef = React.createRef<HTMLInputElement>()
@@ -66,6 +61,10 @@ export class TypeHere extends React.Component<{}, {}> {
 
 	private onTitleSubmit = () => {
 		funcIf(this.state.inputValue !== '', this.submitTitle)
+	}
+
+	private requestExampleStories = () => {
+		this.props.requestExampleStories()
 	}
 
 	private onChapterContentChange = (value: string, index: number) => {
@@ -108,6 +107,7 @@ export class TypeHere extends React.Component<{}, {}> {
 	}
 
 	public render() {
+		const { isLoading, exampleStories } = this.props
 		const {
 			inputValue,
 			titles,
@@ -124,6 +124,22 @@ export class TypeHere extends React.Component<{}, {}> {
 					onEnter={this.onTitleSubmit}
 				/>
 				<Button onClick={this.onTitleSubmit} text="Click me!" />
+				<Button
+					onClick={this.requestExampleStories}
+					text="Request example stories?"
+				/>
+				{exampleStories &&
+					exampleStories.titles.length === 0 &&
+					isLoading && <p>Be patient! It's loading.</p>}
+				{exampleStories &&
+					exampleStories.titles.length > 0 &&
+					!isLoading &&
+					exampleStories.titles.map((title: string, index: number) => (
+						<div key={`example-story-${index}`}>
+							<h3>{title}</h3>
+							<p>{exampleStories.chapters[index]}</p>
+						</div>
+					))}
 				{titles.map((title, index) => (
 					<Chapter
 						key={`submissions-chapter-${index}`}
@@ -140,3 +156,23 @@ export class TypeHere extends React.Component<{}, {}> {
 		)
 	}
 }
+
+const mapStateToProps = (state: Root.State): TypeHereStateProps => ({
+	exampleStories: state.welcome.exampleStories,
+	isLoading: state.welcome.isLoading
+})
+
+const mapDipatchToProps = (
+	dispatch: Dispatch<any, TypeHereDispatchProps>
+): TypeHereDispatchProps =>
+	bindActionCreators(
+		{
+			requestExampleStories: Welcome.ActionCreators.requestExampleStories
+		},
+		dispatch
+	)
+
+export const TypeHere = connect(
+	mapStateToProps,
+	mapDipatchToProps
+)(TypeHereClass)
