@@ -4,13 +4,13 @@ import './App.css'
 import { Welcome } from './features/welcome/welcome'
 
 class App extends React.Component {
-  public render() {
-    return (
-      <div className="App">
-        <Welcome />
-      </div>
-    );
-  }
+	public render() {
+		return (
+			<div className="App">
+				<Welcome />
+			</div>
+		)
+	}
 }
 
-export default App;
+export default App
