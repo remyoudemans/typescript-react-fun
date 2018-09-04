@@ -1,13 +1,11 @@
 import { takeEvery, put } from 'redux-saga/effects'
 import { Welcome } from '../modules'
+import { requestApi } from './request-api'
 
 export function* getExampleStories() {
-	const response = yield fetch('http://localhost:3001/example-story', {
-		mode: 'cors'
-	})
-	const exampleStories = yield response.json()
+	const exampleStories = yield requestApi('http://localhost:3001/example-story')
 
-	if (exampleStories && exampleStories.titles.length) {
+	if (exampleStories && exampleStories.titles && exampleStories.titles.length) {
 		yield put(Welcome.ActionCreators.successExampleStories(exampleStories))
 	}
 }
