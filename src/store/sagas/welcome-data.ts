@@ -3,7 +3,11 @@ import { Welcome } from '../modules'
 import { requestApi } from './request-api'
 
 export function* getExampleStories() {
-	const exampleStories = yield requestApi('http://story-builder-back-end/example-story')
+    // TODO: add env magic so these can be set in env variables
+
+    // this is the one that works when using docker-compose
+	// const exampleStories = yield requestApi('http://story-builder-back-end/example-story')
+	const exampleStories = yield requestApi('http://localhost:3001/example-story')
 
 	if (exampleStories && exampleStories.titles && exampleStories.titles.length) {
 		yield put(Welcome.ActionCreators.successExampleStories(exampleStories))

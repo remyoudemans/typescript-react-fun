@@ -7,7 +7,7 @@ interface TextInputProps {
 	placeholder: string
 	onChange: React.ChangeEventHandler<HTMLInputElement>
 	onEnter?: () => void
-	innerRef?: React.RefObject<{}>
+	innerRef?: React.RefObject<HTMLInputElement>
 }
 
 export const TextInput: React.SFC<TextInputProps> = ({
