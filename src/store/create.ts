@@ -25,7 +25,8 @@ export function configureStore(): Store<Root.State> {
 		// reduxBatch,
 		applyMiddleware(...middlewares),
 		// reduxBatch,
-		DevTools.instrument()
+        ...(DevTools && typeof DevTools.instrument === 'function' && [DevTools.instrument()] || [])
+		
 	]
 	const store = createStore(
 		Root.reducer,
