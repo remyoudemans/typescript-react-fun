@@ -1,4 +1,5 @@
-import * as React from 'react'
+import React, { useState, useRef } from 'react'
+
 import { changeItemAtIndex, funcIf } from '../../utils'
 import { TextInput } from '../../components/text-input'
 import { Chapter } from './chapter'
@@ -9,14 +10,6 @@ import { connect } from 'react-redux'
 import { Stories } from '../../store/modules/welcome'
 
 import { Root } from '../../store/modules'
-
-interface TypeHereState {
-	inputValue: string
-	titleCount: number
-	titles: string[]
-	chapterContents: string[]
-	unsubmittedChapterContents: string[]
-}
 
 interface TypeHereStateProps {
 	exampleStories: Stories
@@ -29,103 +22,84 @@ interface TypeHereDispatchProps {
 
 type TypeHereProps = TypeHereStateProps & TypeHereDispatchProps
 
-class TypeHereClass extends React.Component<TypeHereProps> {
-	public state: TypeHereState = {
-		inputValue: '',
-		titleCount: 0,
-		titles: [],
-		chapterContents: [],
-		unsubmittedChapterContents: []
-	}
+const TypeHereComponent: React.FunctionComponent<TypeHereProps> = ({
+    exampleStories,
+    isLoading,
+    requestExampleStories
+}) => {
+    const [inputValue, setInputValue] = useState('')
+    const [titleCount, setTitleCount] = useState(0)
+    const [titles, setTitles] = useState<string[]>([])
+    const [chapterContents, setChapterContents] = useState<string[]>([])
+    const [unsubmittedChapterContents, setUnsubmittedChapterContents] = useState<string[]>([])
 
-	private titleInputRef = React.createRef<HTMLInputElement>()
 
-	private focusOnTitleInput = () => {
-		const inputRef = this.titleInputRef.current as HTMLInputElement
+	const titleInputRef = useRef<HTMLInputElement>(null)
+
+	const focusOnTitleInput = () => {
+		const inputRef = titleInputRef.current as HTMLInputElement
 		inputRef.focus()
 	}
 
-	private onType = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({ inputValue: e.target.value })
+	const onType = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setInputValue(e.target.value)
 	}
 
-	private submitTitle = () => {
-		this.setState((prevState: TypeHereState) => ({
-			inputValue: '',
-			titleCount: prevState.titleCount + 1,
-			titles: [...prevState.titles, prevState.inputValue],
-			chapterContents: [...prevState.chapterContents, ''],
-			unsubmittedChapterContents: [...prevState.unsubmittedChapterContents, '']
-		}))
+	const submitTitle = () => {
+        setInputValue('')
+        setTitleCount(titleCount + 1)
+        setTitles(titles.concat(inputValue))
+        setChapterContents(chapterContents.concat(''))
+        setUnsubmittedChapterContents(unsubmittedChapterContents.concat(''))
 	}
 
-	private onTitleSubmit = () => {
-		funcIf(this.state.inputValue !== '', this.submitTitle)
+	const onTitleSubmit = () => {
+		funcIf(inputValue !== '', submitTitle)
 	}
 
-	private requestExampleStories = () => {
-		this.props.requestExampleStories()
+    const onChapterContentChange = (value: string, index: number) => {
+        setUnsubmittedChapterContents(changeItemAtIndex(
+            unsubmittedChapterContents,
+            index,
+            value
+        ))
+    }
+
+	const onChapterContentSubmit = (index: number) => {
+        setChapterContents(changeItemAtIndex(
+            chapterContents,
+            index,
+            unsubmittedChapterContents[index]
+        ))
+        setUnsubmittedChapterContents(changeItemAtIndex(
+            unsubmittedChapterContents,
+            index,
+            ''
+        ))
+        focusOnTitleInput()
 	}
 
-	private onChapterContentChange = (value: string, index: number) => {
-		this.setState((prevState: TypeHereState) => ({
-			unsubmittedChapterContents: changeItemAtIndex(
-				prevState.unsubmittedChapterContents,
-				index,
-				value
-			)
-		}))
-	}
+    const makeChapterContentEditable = (index: number) => {
+        setChapterContents(changeItemAtIndex(chapterContents, index, ''))
+        setUnsubmittedChapterContents(changeItemAtIndex(
+            unsubmittedChapterContents,
+            index,
+            chapterContents[index]
+        ))
+    }
 
-	private onChapterContentSubmit = (index: number) => {
-		this.setState(
-			(prevState: TypeHereState) => ({
-				chapterContents: changeItemAtIndex(
-					prevState.chapterContents,
-					index,
-					prevState.unsubmittedChapterContents[index]
-				),
-				unsubmittedChapterContents: changeItemAtIndex(
-					prevState.unsubmittedChapterContents,
-					index,
-					''
-				)
-			}),
-			this.focusOnTitleInput
-		)
-	}
-
-	private makeChapterContentEditable = (index: number) => {
-		this.setState((prevState: TypeHereState) => ({
-			chapterContents: changeItemAtIndex(prevState.chapterContents, index, ''),
-			unsubmittedChapterContents: changeItemAtIndex(
-				prevState.unsubmittedChapterContents,
-				index,
-				prevState.chapterContents[index]
-			)
-		}))
-	}
-
-	public render() {
-		const { isLoading, exampleStories } = this.props
-		const {
-			inputValue,
-			titles,
-			chapterContents,
-			unsubmittedChapterContents
-		} = this.state
 		return (
 			<>
 				<TextInput
-					innerRef={this.titleInputRef}
+					innerRef={titleInputRef}
 					placeholder={`title chapter ${titles.length + 1}`}
 					value={inputValue}
-					onChange={this.onType}
-					onEnter={this.onTitleSubmit}
+					onChange={onType}
+					onEnter={onTitleSubmit}
 				/>
-				<Button onClick={this.onTitleSubmit} text="Click me!" />
+				<Button onClick={onTitleSubmit} text="Click me!" />
 				<Button
-					onClick={this.requestExampleStories}
+					onClick={requestExampleStories}
 					text="Request example stories?"
 				/>
 				{exampleStories &&
@@ -147,14 +121,13 @@ class TypeHereClass extends React.Component<TypeHereProps> {
 						chapterIndex={index}
 						chapterText={chapterContents[index]}
 						unsubmittedChapterText={unsubmittedChapterContents[index]}
-						onChapterTextChange={this.onChapterContentChange}
-						onChapterTextSubmit={this.onChapterContentSubmit}
-						makeChapterContentEditable={this.makeChapterContentEditable}
+						onChapterTextChange={onChapterContentChange}
+						onChapterTextSubmit={onChapterContentSubmit}
+						makeChapterContentEditable={makeChapterContentEditable}
 					/>
 				))}
 			</>
 		)
-	}
 }
 
 const mapStateToProps = (state: Root.State): TypeHereStateProps => ({
@@ -175,4 +148,4 @@ const mapDipatchToProps = (
 export const TypeHere = connect(
 	mapStateToProps,
 	mapDipatchToProps
-)(TypeHereClass)
+)(TypeHereComponent)
