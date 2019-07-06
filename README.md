@@ -1,4 +1,4 @@
-# typescript-react-fun
+# story builder front end
 
 This is a story-writing helper!
 
