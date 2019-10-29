@@ -1,22 +1,19 @@
 import React, { useState, useRef, useCallback } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { changeItemAtIndex, funcIf } from '../../utils'
 import { TextInput } from '../../components/text-input'
 import { Chapter } from './chapter'
 import { Button } from '../../components/button'
 import { Welcome } from '../../store/modules'
-import { Root } from '../../store/modules'
+import { ExampleStories } from './example-stories'
 
-export const TypeHere: React.FunctionComponent<{}> = () => {
+export const TypeHere: React.FunctionComponent = () => {
     const [inputValue, setInputValue] = useState('')
     const [titleCount, setTitleCount] = useState(0)
     const [titles, setTitles] = useState<string[]>([])
     const [chapterContents, setChapterContents] = useState<string[]>([])
     const [unsubmittedChapterContents, setUnsubmittedChapterContents] = useState<string[]>([])
-
-    const exampleStories = useSelector((state: Root.State) => state.welcome.exampleStories)
-    const isLoading = useSelector((state: Root.State) => state.welcome.isLoading)
 
     const dispatch = useDispatch()
 
@@ -93,18 +90,7 @@ export const TypeHere: React.FunctionComponent<{}> = () => {
                     onClick={requestExampleStories}
 					text="Request example stories?"
 				/>
-				{exampleStories &&
-					exampleStories.titles.length === 0 &&
-					isLoading && <p>Be patient! It's loading.</p>}
-				{exampleStories &&
-					exampleStories.titles.length > 0 &&
-					!isLoading &&
-					exampleStories.titles.map((title: string, index: number) => (
-						<div key={`example-story-${index}`}>
-							<h3>{title}</h3>
-							<p>{exampleStories.chapters[index]}</p>
-						</div>
-					))}
+                <ExampleStories />
 				{titles.map((title, index) => (
 					<Chapter
 						key={`submissions-chapter-${index}`}
