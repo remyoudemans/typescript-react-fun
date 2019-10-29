@@ -4,17 +4,17 @@
   "private": true,
   "dependencies": {
     "@types/history": "^4.7.2",
-    "@types/react-redux": "^6.0.14",
+    "@types/react-redux": "^7.1.5",
     "@types/react-router-redux": "^5.0.18",
     "@types/redux-devtools": "^3.0.46",
     "@types/redux-devtools-dock-monitor": "^1.1.33",
     "@types/redux-devtools-log-monitor": "^1.0.34",
     "emotion": "^9.2.12",
     "history": "^4.9.0",
-    "react": "^16.8.6",
+    "react": "^16.8.3",
     "react-dom": "^16.8.6",
     "react-emotion": "^9.2.12",
-    "react-redux": "^5.1.1",
+    "react-redux": "^7.1.1",
     "react-router-dom": "^4.3.1",
     "react-router-redux": "^4.0.8",
     "react-scripts-ts": "^4.0.8",
@@ -24,7 +24,7 @@
     "redux-devtools-instrument": "^1.9.0",
     "redux-devtools-log-monitor": "^1.4.0",
     "redux-saga": "^0.16.2",
-    "ts-jest": "^23.10.5"
+    "ts-jest": "^24.1.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
