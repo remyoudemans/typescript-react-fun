@@ -16,7 +16,7 @@ export const ChapterContent: React.SFC<ChapterContentProps> = ({
   return (
     <>
       <Text italic>{text}</Text>
-      <Text tiny onClick={makeTextEditable}>
+      <Text cursor='pointer' tiny onClick={makeTextEditable}>
         (change?)
       </Text>
     </>
