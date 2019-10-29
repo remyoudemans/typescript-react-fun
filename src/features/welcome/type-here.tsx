@@ -1,38 +1,26 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { changeItemAtIndex, funcIf } from '../../utils'
 import { TextInput } from '../../components/text-input'
 import { Chapter } from './chapter'
 import { Button } from '../../components/button'
 import { Welcome } from '../../store/modules'
-import { bindActionCreators, Dispatch } from 'redux'
-import { connect } from 'react-redux'
-import { Stories } from '../../store/modules/welcome'
+import { ExampleStories } from './example-stories'
 
-import { Root } from '../../store/modules'
-
-interface TypeHereStateProps {
-	exampleStories: Stories
-	isLoading: boolean
-}
-
-interface TypeHereDispatchProps {
-	requestExampleStories: typeof Welcome.ActionCreators.requestExampleStories
-}
-
-type TypeHereProps = TypeHereStateProps & TypeHereDispatchProps
-
-const TypeHereComponent: React.FunctionComponent<TypeHereProps> = ({
-    exampleStories,
-    isLoading,
-    requestExampleStories
-}) => {
+export const TypeHere: React.FunctionComponent = () => {
     const [inputValue, setInputValue] = useState('')
     const [titleCount, setTitleCount] = useState(0)
     const [titles, setTitles] = useState<string[]>([])
     const [chapterContents, setChapterContents] = useState<string[]>([])
     const [unsubmittedChapterContents, setUnsubmittedChapterContents] = useState<string[]>([])
 
+    const dispatch = useDispatch()
+
+    const requestExampleStories = useCallback(
+        () => dispatch(Welcome.ActionCreators.requestExampleStories()),
+        [dispatch]
+    )
 
 	const titleInputRef = useRef<HTMLInputElement>(null)
 
@@ -99,21 +87,10 @@ const TypeHereComponent: React.FunctionComponent<TypeHereProps> = ({
 				/>
 				<Button onClick={onTitleSubmit} text="Click me!" />
 				<Button
-					onClick={requestExampleStories}
+                    onClick={requestExampleStories}
 					text="Request example stories?"
 				/>
-				{exampleStories &&
-					exampleStories.titles.length === 0 &&
-					isLoading && <p>Be patient! It's loading.</p>}
-				{exampleStories &&
-					exampleStories.titles.length > 0 &&
-					!isLoading &&
-					exampleStories.titles.map((title: string, index: number) => (
-						<div key={`example-story-${index}`}>
-							<h3>{title}</h3>
-							<p>{exampleStories.chapters[index]}</p>
-						</div>
-					))}
+                <ExampleStories />
 				{titles.map((title, index) => (
 					<Chapter
 						key={`submissions-chapter-${index}`}
@@ -129,23 +106,3 @@ const TypeHereComponent: React.FunctionComponent<TypeHereProps> = ({
 			</>
 		)
 }
-
-const mapStateToProps = (state: Root.State): TypeHereStateProps => ({
-	exampleStories: state.welcome.exampleStories,
-	isLoading: state.welcome.isLoading
-})
-
-const mapDipatchToProps = (
-	dispatch: Dispatch<any, TypeHereDispatchProps>
-): TypeHereDispatchProps =>
-	bindActionCreators(
-		{
-			requestExampleStories: Welcome.ActionCreators.requestExampleStories
-		},
-		dispatch
-	)
-
-export const TypeHere = connect(
-	mapStateToProps,
-	mapDipatchToProps
-)(TypeHereComponent)
