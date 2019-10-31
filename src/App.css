@@ -6,8 +6,7 @@ body {
   text-align: center;
   margin: 0 130px;
   background-color: white;
-  height: 100vh;
-  overflow-y: hidden;
+  min-height: 100vh
 }
 
 .App-logo {
